@@ -1,11 +1,6 @@
-// /api/searchSpotify.js
-
-// Pastikan untuk menginstal: npm install node-fetch@2
 import fetch from 'node-fetch';
 
-// Fungsi handler default untuk Vercel
 export default async function handler(request, response) {
-    // Mengizinkan permintaan dari domain mana pun (CORS)
     response.setHeader('Access-Control-Allow-Origin', '*');
     response.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -14,7 +9,6 @@ export default async function handler(request, response) {
         return response.status(200).end();
     }
 
-    // Ambil Client ID dan Secret dari Environment Variables di Vercel
     const spotifyClientId = process.env.SPOTIFY_CLIENT_ID;
     const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
