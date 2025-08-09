@@ -40,6 +40,13 @@
             overflow: hidden;
             background-color: #2C6E49;
             color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .message-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         .message-card::after {
             content: '';
@@ -79,10 +86,9 @@
                     <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-auto">
                     <span>cookiesforyou</span>
                 </a>
-                <!-- Desktop Menu -->
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
                     <a href="#" id="submit-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
-                    <a href="/" id="browse-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
+                    <a href="?page=browse" id="browse-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
                     <a href="?page=history" id="history-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">History</a>
                 </nav>
                 <!-- Mobile Burger Menu Button -->
@@ -103,7 +109,7 @@
             </div>
             <nav class="flex flex-col items-center justify-center space-y-8 text-xl font-medium text-gray-600">
                 <a href="#" id="submit-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
-                <a href="/" id="browse-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
+                <a href="?page=browse" id="browse-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
                 <a href="?page=history" id="history-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">History</a>
             </nav>
         </div>
@@ -127,24 +133,25 @@
                     <p class="mt-6 max-w-2xl mx-auto text-gray-500">Express your untold feelings with Okimo Cookies and music.</p>
                     <div class="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
                         <button id="tell-story-btn" class="bg-[#2C6E49] text-white font-semibold py-3 px-8 rounded-lg hover:bg-[#4C956C] transition w-full sm:w-auto">Tell Your Story</button>
-                        <button id="browse-stories-btn" class="font-semibold py-3 px-8 rounded-lg border border-gray-300 hover:bg-gray-100 transition w-full sm:w-auto">Browse the Stories</button>
+                        <a href="?page=browse" id="browse-stories-btn" class="font-semibold py-3 px-8 rounded-lg border border-gray-300 hover:bg-gray-100 transition w-full sm:w-auto">Browse the Stories</a>
                     </div>
                 </section>
                 
                 <section id="message-grid-section">
-                    <div class="mb-8 max-w-xl mx-auto">
-                         <input type="text" id="name-search" class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4C956C] focus:outline-none transition" placeholder="Cari berdasarkan nama penerima...">
-                    </div>
+                    <h3 class="text-2xl font-bold text-center text-[#2C6E49] mb-8">Latest Stories</h3>
                     <div id="message-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
                 </section>
             </div>
 
-            <!-- History View -->
-            <div id="history-view" class="hidden max-w-6xl mx-auto py-12 space-y-8">
-                <h1 class="text-3xl font-bold text-center text-[#2C6E49]">Your Submission History</h1>
-                <p class="text-center text-gray-600">Messages you've created on this device.</p>
-                <section id="history-grid-section">
-                    <div id="history-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
+            <!-- Browse/History View -->
+            <div id="grid-view" class="hidden max-w-6xl mx-auto py-12 space-y-8">
+                <h1 id="grid-view-title" class="text-3xl font-bold text-center text-[#2C6E49]"></h1>
+                <p id="grid-view-subtitle" class="text-center text-gray-600"></p>
+                <div class="mb-8 max-w-xl mx-auto">
+                    <input type="text" id="name-search" class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4C956C] focus:outline-none transition" placeholder="Cari berdasarkan nama penerima...">
+                </div>
+                <section id="full-grid-section">
+                    <div id="full-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
                 </section>
             </div>
 
@@ -220,7 +227,7 @@
     <script type="module">
         const loadingEl = document.getElementById('loading');
         const homeViewEl = document.getElementById('home-view');
-        const historyViewEl = document.getElementById('history-view');
+        const gridViewEl = document.getElementById('grid-view');
         const viewMessageEl = document.getElementById('view-message');
         const createModalEl = document.getElementById('create-modal');
         const modalContentEl = createModalEl.querySelector('.modal-content');
@@ -233,8 +240,11 @@
         const cookieOptionsEl = document.getElementById('cookie-options');
         const createBtn = document.getElementById('create-btn');
         const messageGridEl = document.getElementById('message-grid');
-        const historyGridEl = document.getElementById('history-grid');
+        const fullGridEl = document.getElementById('full-grid');
         const nameSearchInput = document.getElementById('name-search');
+        
+        const gridViewTitle = document.getElementById('grid-view-title');
+        const gridViewSubtitle = document.getElementById('grid-view-subtitle');
         
         const viewRecipientName = document.getElementById('view-recipient-name');
         const viewMessageText = document.getElementById('view-message-text');
@@ -345,11 +355,11 @@
         const showView = (viewName) => {
             loadingEl.classList.add('hidden');
             homeViewEl.classList.add('hidden');
-            historyViewEl.classList.add('hidden');
+            gridViewEl.classList.add('hidden');
             viewMessageEl.classList.add('hidden');
             
             if (viewName === 'home') homeViewEl.classList.remove('hidden');
-            else if (viewName === 'history') historyViewEl.classList.remove('hidden');
+            else if (viewName === 'grid') gridViewEl.classList.remove('hidden');
             else if (viewName === 'view') viewMessageEl.classList.remove('hidden');
             else if (viewName === 'loading') loadingEl.classList.remove('hidden');
         };
@@ -437,7 +447,8 @@
 
                 setTimeout(async () => {
                     closeCreateModal();
-                    await loadAndDisplayAllMessages();
+                    allMessagesCache = []; // Clear cache to force a refetch
+                    await loadAndDisplayMessages({ target: messageGridEl, limit: 6 });
                     showToast('Pesan berhasil dikirim!', 'success');
                     resetForm();
                     createBtn.disabled = false;
@@ -452,55 +463,49 @@
             }
         };
         
-        const loadAndDisplayAllMessages = async (filter = '') => {
-            messageGridEl.innerHTML = '';
+        const loadAndDisplayMessages = async ({ target, limit = 0, filter = '', source = 'all' }) => {
+            target.innerHTML = '';
+            let messagesToDisplay = [];
+
             try {
-                if (allMessagesCache.length === 0 || filter === '') {
-                    const response = await fetch('/api/getMessages');
-                    if (!response.ok) throw new Error('Failed to fetch messages');
-                    allMessagesCache = await response.json();
+                if (source === 'all') {
+                    if (allMessagesCache.length === 0) {
+                        const response = await fetch('/api/getMessages');
+                        if (!response.ok) throw new Error('Failed to fetch messages');
+                        allMessagesCache = await response.json();
+                    }
+                    messagesToDisplay = allMessagesCache;
+                } else if (source === 'history') {
+                    const historyIds = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+                    if (historyIds.length === 0) {
+                        target.innerHTML = '<p class="text-gray-500 text-center col-span-full">Anda belum pernah mengirim pesan dari perangkat ini.</p>';
+                        return;
+                    }
+                    const messagePromises = historyIds.map(async (id) => {
+                        const res = await fetch(`/api/getMessage?id=${id}`);
+                        return res.ok ? res.json() : null;
+                    });
+                    messagesToDisplay = (await Promise.all(messagePromises)).filter(Boolean);
                 }
 
-                const filteredMessages = allMessagesCache.filter(msg => 
+                const filteredMessages = messagesToDisplay.filter(msg => 
                     msg.to.toLowerCase().includes(filter.toLowerCase())
                 );
+                
+                const limitedMessages = limit > 0 ? filteredMessages.slice(0, limit) : filteredMessages;
 
-                if (filteredMessages.length === 0) {
-                    messageGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Tidak ada pesan yang cocok.</p>';
+                if (limitedMessages.length === 0) {
+                    target.innerHTML = '<p class="text-gray-500 text-center col-span-full">Tidak ada pesan yang cocok.</p>';
                 } else {
-                    filteredMessages.forEach((msg) => renderMessageGridItem(msg));
+                    limitedMessages.forEach((msg, index) => renderMessageGridItem(msg, false, target, index * 100));
                 }
             } catch (error) {
                 console.error("Error fetching messages:", error);
-                messageGridEl.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat pesan.</p>';
+                target.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat pesan.</p>';
             }
         };
 
-        const loadAndDisplayHistory = async () => {
-            historyGridEl.innerHTML = '';
-            const historyIds = JSON.parse(localStorage.getItem('messageHistory') || '[]');
-            if (historyIds.length === 0) {
-                historyGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Anda belum pernah mengirim pesan dari perangkat ini.</p>';
-                return;
-            }
-
-            try {
-                const messagePromises = historyIds.map(async (id) => {
-                    const res = await fetch(`/api/getMessage?id=${id}`);
-                    return res.ok ? res.json() : null;
-                });
-                const messages = (await Promise.all(messagePromises)).filter(Boolean);
-                
-                messages.forEach(msg => {
-                    renderMessageGridItem(msg, false, historyGridEl);
-                });
-            } catch (error) {
-                console.error("Error fetching history:", error);
-                historyGridEl.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat riwayat.</p>';
-            }
-        };
-
-        const renderMessageGridItem = (message, prepend = false, targetGrid = messageGridEl) => {
+        const renderMessageGridItem = (message, prepend = false, targetGrid = messageGridEl, delay = 0) => {
             const messageCard = document.createElement('a');
             messageCard.href = `?id=${message.id}`;
             messageCard.className = 'message-card block h-48 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer';
@@ -535,6 +540,10 @@
             } else {
                 targetGrid.appendChild(messageCard);
             }
+
+            setTimeout(() => {
+                messageCard.classList.add('visible');
+            }, delay);
         };
 
         const router = async () => {
@@ -554,11 +563,19 @@
                     window.location.href = window.location.pathname;
                 }
             } else if (page === 'history') {
-                showView('history');
-                await loadAndDisplayHistory();
-            } else {
+                showView('grid');
+                gridViewTitle.textContent = 'Your Submission History';
+                gridViewSubtitle.textContent = "Messages you've created on this device.";
+                await loadAndDisplayMessages({ target: fullGridEl, source: 'history' });
+            } else if (page === 'browse') {
+                showView('grid');
+                gridViewTitle.textContent = 'All Stories';
+                gridViewSubtitle.textContent = 'Browse all messages sent by everyone.';
+                await loadAndDisplayMessages({ target: fullGridEl });
+            }
+            else {
                 showView('home');
-                await loadAndDisplayAllMessages();
+                await loadAndDisplayMessages({ target: messageGridEl, limit: 6 });
             }
         };
 
@@ -575,7 +592,12 @@
         });
 
         nameSearchInput.addEventListener('input', (e) => {
-            loadAndDisplayAllMessages(e.target.value);
+            const page = new URLSearchParams(window.location.search).get('page');
+            if (page === 'browse') {
+                loadAndDisplayMessages({ target: fullGridEl, filter: e.target.value });
+            } else if (page === 'history') {
+                loadAndDisplayMessages({ target: fullGridEl, filter: e.target.value, source: 'history' });
+            }
         });
         
         const goHome = (e) => {
@@ -585,16 +607,24 @@
 
         backToHomeBtn.addEventListener('click', goHome);
         logoBtn.addEventListener('click', goHome);
-        browseNavBtn.addEventListener('click', goHome);
-        browseStoriesBtn.addEventListener('click', () => document.getElementById('message-grid-section').scrollIntoView({ behavior: 'smooth' }));
         
-        historyNavBtn.addEventListener('click', (e) => {
-            e.preventDefault();
+        const navigate = (pageUrl) => {
             const currentUrl = new URL(window.location.href);
-            currentUrl.searchParams.set('page', 'history');
-            currentUrl.searchParams.delete('id');
-            window.location.href = currentUrl.toString();
-        });
+            const targetUrl = new URL(pageUrl, window.location.origin);
+            if (currentUrl.pathname === targetUrl.pathname && currentUrl.search === targetUrl.search) {
+                window.location.reload();
+            } else {
+                window.location.href = pageUrl;
+            }
+        };
+
+        browseNavBtn.addEventListener('click', (e) => { e.preventDefault(); navigate('?page=browse'); });
+        historyNavBtn.addEventListener('click', (e) => { e.preventDefault(); navigate('?page=history'); });
+        browseStoriesBtn.addEventListener('click', (e) => { e.preventDefault(); navigate('?page=browse'); });
+        
+        browseMobileNavBtn.addEventListener('click', (e) => { e.preventDefault(); navigate('?page=browse'); });
+        historyMobileNavBtn.addEventListener('click', (e) => { e.preventDefault(); navigate('?page=history'); });
+
 
         shareBtn.addEventListener('click', () => {
             shareLinkInput.select();
@@ -615,11 +645,6 @@
         submitMobileNavBtn.addEventListener('click', () => {
             closeMobileMenu();
             openCreateModal();
-        });
-        browseMobileNavBtn.addEventListener('click', goHome);
-        historyMobileNavBtn.addEventListener('click', (e) => {
-            closeMobileMenu();
-            historyNavBtn.click();
         });
 
         burgerBtn.addEventListener('click', openMobileMenu);
