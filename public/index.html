@@ -163,16 +163,15 @@
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-48 h-48 bg-[#4C956C] rounded-full"></div>
                             </div>
-                            <img id="view-cookie-img" src="" alt="" class="absolute inset-0 w-40 h-40 m-auto object-cover rounded-full">
+                            <img id="view-cookie-img" src="" alt="" class="absolute inset-0 w-44 h-44 m-auto object-cover rounded-full">
                         </div>
-                        <div class="text-center space-y-4 flex-grow flex flex-col justify-center">
-                            <div>
-                                <p id="view-recipient-name" class="text-2xl font-semibold"></p>
-                            </div>
+                        <div class="text-center space-y-4 flex-grow flex flex-col justify-center px-2">
+                            <p id="view-cookie-name" class="font-semibold tracking-wider uppercase text-sm"></p>
+                            <div id="view-recipient-container"></div>
                             <p id="view-message-text" class="font-handwriting text-4xl leading-tight flex-grow"></p>
                         </div>
                         <div id="spotify-player-container" class="mt-auto flex-shrink-0"></div>
-                        <button id="share-btn" class="w-full bg-[#FEFEE3] text-gray-800 font-bold py-3 px-4 rounded-lg hover:bg-gray-200 transition mt-4 flex-shrink-0">
+                        <button id="share-btn" class="bg-[#FEFEE3] text-gray-800 font-bold py-3 px-10 rounded-lg hover:bg-gray-200 transition mt-4 flex-shrink-0 self-center">
                             Share
                         </button>
                     </div>
@@ -275,6 +274,8 @@
         const submitMobileNavBtn = document.getElementById('submit-mobile-nav-btn');
         const browseMobileNavBtn = document.getElementById('browse-mobile-nav-btn');
         const historyMobileNavBtn = document.getElementById('history-mobile-nav-btn');
+        const viewRecipientContainer = document.getElementById('view-recipient-container');
+
 
         const cookieData = [
             { id: 'orijinaru', name: 'Classic Orijinaru', img: 'https://iili.io/FL2dlun.png' },
@@ -409,7 +410,10 @@
             const cookie = cookieData.find(c => c.id === data.cookie_id) || cookieData[0];
             viewCookieImg.src = cookie.img;
             viewCookieImg.alt = cookie.name;
-            viewRecipientName.textContent = `UNTUK: ${data.to}`;
+            viewRecipientContainer.innerHTML = `
+                <span class="block text-sm uppercase tracking-wider">UNTUK:</span>
+                <span class="block text-3xl font-bold">${data.to}</span>
+            `;
             
             if (data.song_id) {
                 const iframe = document.createElement('iframe');
