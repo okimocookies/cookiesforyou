@@ -76,16 +76,38 @@
         <header class="p-4 md:p-6 max-w-6xl mx-auto w-full">
             <div class="flex justify-between items-center">
                 <a href="/" id="logo" class="flex items-center gap-2 font-bold text-lg tracking-tighter text-[#2C6E49]">
-                    <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-8">
+                    <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-auto">
                     <span>cookiesforyou</span>
                 </a>
+                <!-- Desktop Menu -->
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
                     <a href="#" id="submit-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
                     <a href="/" id="browse-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
                     <a href="?page=history" id="history-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">History</a>
                 </nav>
+                <!-- Mobile Burger Menu Button -->
+                <div class="md:hidden">
+                    <button id="burger-btn" class="p-2 rounded-md hover:bg-gray-200/50 focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
             </div>
         </header>
+        
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden fixed inset-0 bg-[#FCFDE2] z-50 p-4">
+            <div class="flex justify-end mb-8">
+                 <button id="close-mobile-menu-btn" class="p-2 rounded-md hover:bg-gray-200/50 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <nav class="flex flex-col items-center justify-center space-y-8 text-xl font-medium text-gray-600">
+                <a href="#" id="submit-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
+                <a href="/" id="browse-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
+                <a href="?page=history" id="history-mobile-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">History</a>
+            </nav>
+        </div>
+
 
         <main class="px-4 md:px-6 max-w-6xl mx-auto w-full flex-grow">
             <!-- Loading Spinner -->
@@ -229,6 +251,12 @@
         const historyNavBtn = document.getElementById('history-nav-btn');
         const closeModalBtn = document.getElementById('close-modal-btn');
         const logoBtn = document.getElementById('logo');
+        const burgerBtn = document.getElementById('burger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuBtn = document.getElementById('close-mobile-menu-btn');
+        const submitMobileNavBtn = document.getElementById('submit-mobile-nav-btn');
+        const browseMobileNavBtn = document.getElementById('browse-mobile-nav-btn');
+        const historyMobileNavBtn = document.getElementById('history-mobile-nav-btn');
 
         const cookieData = [
             { id: 'orijinaru', name: 'Classic Orijinaru', img: 'https://iili.io/FL2dlun.png' },
@@ -578,9 +606,25 @@
                 showToast('Gagal menyalin link.', 'error');
             }
         });
+        
+        const openMobileMenu = () => mobileMenu.classList.remove('hidden');
+        const closeMobileMenu = () => mobileMenu.classList.add('hidden');
 
         tellStoryBtn.addEventListener('click', openCreateModal);
         submitNavBtn.addEventListener('click', openCreateModal);
+        submitMobileNavBtn.addEventListener('click', () => {
+            closeMobileMenu();
+            openCreateModal();
+        });
+        browseMobileNavBtn.addEventListener('click', goHome);
+        historyMobileNavBtn.addEventListener('click', (e) => {
+            closeMobileMenu();
+            historyNavBtn.click();
+        });
+
+        burgerBtn.addEventListener('click', openMobileMenu);
+        closeMobileMenuBtn.addEventListener('click', closeMobileMenu);
+        
         closeModalBtn.addEventListener('click', closeCreateModal);
         createModalEl.addEventListener('click', (e) => { if (e.target === createModalEl) closeCreateModal(); });
 
