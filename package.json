@@ -1,5 +1,5 @@
 {
-  "name": "sendthecookies",
+  "name": "cookiesforyou",
   "version": "1.0.0",
   "description": "A website for sending anonymous messages with a song.",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "pg": "^8.11.3"
   }
 }
