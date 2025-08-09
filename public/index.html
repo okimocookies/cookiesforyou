@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -84,7 +84,7 @@
             <div class="flex justify-between items-center">
                 <a href="/" id="logo" class="flex items-center gap-2 font-bold text-lg tracking-tighter text-[#2C6E49]">
                     <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-auto">
-                    <span>cookiesforyou</span>
+                    <span class="font-handwriting text-3xl">cookiesforyou</span>
                 </a>
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
                     <a href="#" id="submit-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
@@ -128,8 +128,8 @@
             <!-- Home View (Hero + Grid) -->
             <div id="home-view" class="space-y-12 hidden">
                 <section class="text-center py-12 md:py-20">
-                    <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-[#2C6E49]">A bunch of the untold words,</h1>
-                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight" style="color: #4C956C;">sweetened with cookies & songs</h2>
+                    <h1 class="text-4xl md:text-6xl font-handwriting tracking-tight text-[#2C6E49]">A bunch of the untold words,</h1>
+                    <h2 class="text-4xl md:text-6xl font-handwriting tracking-tight" style="color: #4C956C;">sweetened with cookies & songs</h2>
                     <p class="mt-6 max-w-2xl mx-auto text-gray-500">Express your untold feelings with Okimo Cookies and music.</p>
                     <div class="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
                         <button id="tell-story-btn" class="bg-[#2C6E49] text-white font-semibold py-3 px-8 rounded-lg hover:bg-[#4C956C] transition w-full sm:w-auto">Tell Your Story</button>
@@ -304,11 +304,15 @@
                 trackEl.className = 'p-2 bg-gray-100 hover:bg-gray-200 rounded-lg cursor-pointer transition flex items-center space-x-3';
                 const artistNames = track.artists.map(artist => artist.name).join(', ');
                 trackEl.innerHTML = `
-                    <img src="${track.album.images[2]?.url || ''}" class="w-10 h-10 rounded-sm">
-                    <div>
-                        <p class="font-semibold">${track.name}</p>
-                        <p class="text-sm text-gray-500">${artistNames}</p>
-                    </div>`;
+                    <img src="${track.album.images[2]?.url || ''}" class="w-10 h-10 rounded-sm flex-shrink-0">
+                    <div class="flex-grow overflow-hidden">
+                        <p class="font-semibold truncate">${track.name}</p>
+                        <p class="text-sm text-gray-500 truncate">${artistNames}</p>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-spotify text-green-500 flex-shrink-0" viewBox="0 0 16 16">
+                      <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.669 11.538a.498.498 0 0 1-.686.165c-1.879-1.147-4.243-1.407-7.028-.77a.499.499 0 0 1-.222-.973c3.048-.696 5.662-.397 7.77.892a.5.5 0 0 1 .166.686zm.979-2.178a.624.624 0 0 1-.858.205c-2.15-1.321-5.428-1.704-7.972-.932a.625.625 0 0 1-.278-1.223c2.982-.878 6.59.102 8.986 1.54a.624.624 0 0 1 .206.858zm.083-2.29a.75.75 0 0 1-1.026.284c-2.433-1.463-6.52-1.77-9.088-.958a.75.75 0 0 1-.342-1.457c2.913-.881 7.425-.522 10.247 1.187a.75.75 0 0 1 .283 1.026z"/>
+                    </svg>
+                `;
                 trackEl.onclick = () => selectSong(track);
                 songResultsEl.appendChild(trackEl);
             });
@@ -447,8 +451,7 @@
 
                 setTimeout(async () => {
                     closeCreateModal();
-                    allMessagesCache = []; // Clear cache to force a refetch
-                    await loadAndDisplayMessages({ target: messageGridEl, limit: 6 });
+                    await loadAndDisplayMessages({ target: messageGridEl, limit: 6, forceRefresh: true });
                     showToast('Pesan berhasil dikirim!', 'success');
                     resetForm();
                     createBtn.disabled = false;
@@ -463,13 +466,13 @@
             }
         };
         
-        const loadAndDisplayMessages = async ({ target, limit = 0, filter = '', source = 'all' }) => {
+        const loadAndDisplayMessages = async ({ target, limit = 0, filter = '', source = 'all', forceRefresh = false }) => {
             target.innerHTML = '';
             let messagesToDisplay = [];
 
             try {
                 if (source === 'all') {
-                    if (allMessagesCache.length === 0) {
+                    if (allMessagesCache.length === 0 || forceRefresh) {
                         const response = await fetch('/api/getMessages');
                         if (!response.ok) throw new Error('Failed to fetch messages');
                         allMessagesCache = await response.json();
