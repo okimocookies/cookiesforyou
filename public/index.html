@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untold Words, Sent Through The Song</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FCFDE2; /* Custom background color */
+        }
+        .font-handwriting {
+            font-family: 'Caveat', cursive;
+        }
+        .spotify-embed {
+            border-radius: 12px;
+        }
+        /* Custom scrollbar styles */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9; /* slate-100 */
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* slate-300 */
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* slate-400 */
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .cookie-box.selected {
+            border-color: #4C956C;
+            box-shadow: 0 0 0 3px rgba(76, 149, 108, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div id="app-container" class="w-full">
+        <!-- Header -->
+        <header class="p-4 md:p-6 max-w-6xl mx-auto">
+            <div class="flex justify-between items-center">
+                <a href="#" id="logo" class="font-bold text-lg tracking-tighter text-[#2C6E49]">sendthecookies</a>
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
+                    <a href="#" id="submit-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
+                    <a href="#" id="browse-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Browse</a>
+                    <a href="#" id="history-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">History</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="px-4 md:px-6 max-w-6xl mx-auto">
+            <!-- Loading Spinner -->
+            <div id="loading" class="text-center hidden py-20">
+                <svg class="animate-spin h-8 w-8 text-gray-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="mt-2 text-gray-500">Memuat...</p>
+            </div>
+
+            <!-- Home View (Hero + Grid) -->
+            <div id="home-view" class="space-y-12 hidden">
+                <section class="text-center py-12 md:py-20">
+                    <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-[#2C6E49]">a bunch of the untold words,</h1>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-gray-400">sent through the song</h2>
+                    <p class="mt-6 max-w-2xl mx-auto text-gray-600">Express your untold message through the song.</p>
+                    <div class="mt-8 flex justify-center items-center space-x-4">
+                        <button id="tell-story-btn" class="bg-[#2C6E49] text-white font-semibold py-2 px-6 rounded-lg hover:bg-[#4C956C] transition">Tell Your Story</button>
+                        <button id="browse-stories-btn" class="font-semibold py-2 px-6 rounded-lg border border-gray-300 hover:bg-gray-100 transition">Browse the Stories</button>
+                    </div>
+                </section>
+                
+                <section id="message-grid-section">
+                    <div id="message-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        <!-- Message cards will be injected here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- History View -->
+            <div id="history-view" class="hidden max-w-6xl mx-auto py-12 space-y-8">
+                <h1 class="text-3xl font-bold text-center text-[#2C6E49]">Your Submission History</h1>
+                <p class="text-center text-gray-600">Messages you've created on this device.</p>
+                <section id="history-grid-section">
+                    <div id="history-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        <!-- History cards will be injected here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- View Message View -->
+            <div id="view-message" class="hidden max-w-2xl mx-auto py-12 space-y-8">
+                 <div id="view-cookie-container" class="text-center">
+                    <!-- Cookie image and name will be injected here -->
+                 </div>
+                <h3 class="text-3xl font-bold text-center text-[#2C6E49]" id="view-recipient-name"></h3>
+                <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-sm">
+                    <p id="view-message-text" class="text-2xl font-handwriting leading-relaxed text-gray-700"></p>
+                </div>
+                <div id="spotify-player-container"></div>
+                <div class="space-y-3 pt-4">
+                    <div class="relative">
+                        <input type="text" id="share-link-input" readonly class="w-full bg-gray-100 border border-gray-300 rounded-lg pl-3 pr-20 py-2 text-gray-500">
+                        <button id="share-btn" class="absolute inset-y-0 right-0 flex items-center px-4 bg-[#4C956C] hover:bg-[#2C6E49] text-white font-semibold rounded-r-lg text-sm">Salin</button>
+                    </div>
+                    <button id="back-to-home-btn" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
+                        Kembali ke Beranda
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Create Message Modal -->
+        <div id="create-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+            <div class="modal-content bg-white w-full max-w-md p-6 rounded-2xl shadow-xl transform scale-95 custom-scrollbar overflow-y-auto max-h-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-[#2C6E49]">Tell Your Story</h2>
+                    <button id="close-modal-btn" class="text-gray-400 hover:text-gray-800">&times;</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label for="recipient-name" class="block text-sm font-medium text-gray-600 mb-1">Untuk:</label>
+                        <input type="text" id="recipient-name" class="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#4C956C] focus:outline-none transition" placeholder="Tulis nama, inisial, atau panggilan">
+                    </div>
+                    <div>
+                        <label for="message-text" class="block text-sm font-medium text-gray-600 mb-1">Pesanmu:</label>
+                        <textarea id="message-text" rows="4" class="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#4C956C] focus:outline-none transition" placeholder="Tulis pesan anonim di sini..."></textarea>
+                    </div>
+                    <div>
+                        <label for="song-search" class="block text-sm font-medium text-gray-600 mb-1">Tempelkan Lagu:</label>
+                        <input type="text" id="song-search" class="w-full bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#4C956C] focus:outline-none transition" placeholder="Cari judul lagu di Spotify...">
+                        <div id="song-results" class="mt-2 max-h-40 overflow-y-auto space-y-2 custom-scrollbar"></div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Pilih Cookies:</label>
+                        <div id="cookie-options" class="grid grid-cols-2 gap-4">
+                            <!-- Cookie options will be injected here -->
+                        </div>
+                    </div>
+                    <button id="create-btn" class="w-full bg-[#2C6E49] hover:bg-[#4C956C] text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-lg mt-2">
+                        Kirim Pesan
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300">
+            Link berhasil disalin!
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDoc, getDocs, doc, setLogLevel, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyCIc08FoGVu3KtflfxSCzvvBY-2zmQaA4o",
+            authDomain: "send-the-cookies.firebaseapp.com",
+            projectId: "send-the-cookies",
+            storageBucket: "send-the-cookies.appspot.com",
+            messagingSenderId: "942401524340",
+            appId: "1:942401524340:web:bd695628ed76744d94f721",
+            measurementId: "G-YC179FHYYJ"
+        };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'anonymous-song-message';
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        setLogLevel('debug');
+        
+        const messagesCollection = collection(db, `artifacts/${appId}/public/data/messages`);
+
+        // Ganti dengan URL Cloud Function Anda setelah di-deploy
+        const CLOUD_FUNCTION_URL = `https://us-central1-${firebaseConfig.projectId}.cloudfunctions.net/searchSpotify`;
+
+        const loadingEl = document.getElementById('loading');
+        const homeViewEl = document.getElementById('home-view');
+        const historyViewEl = document.getElementById('history-view');
+        const viewMessageEl = document.getElementById('view-message');
+        const createModalEl = document.getElementById('create-modal');
+        const modalContentEl = createModalEl.querySelector('.modal-content');
+        
+        const recipientNameInput = document.getElementById('recipient-name');
+        const messageTextInput = document.getElementById('message-text');
+        const songSearchInput = document.getElementById('song-search');
+        const songResultsEl = document.getElementById('song-results');
+        const cookieOptionsEl = document.getElementById('cookie-options');
+        const createBtn = document.getElementById('create-btn');
+        const messageGridEl = document.getElementById('message-grid');
+        const historyGridEl = document.getElementById('history-grid');
+        
+        const viewRecipientName = document.getElementById('view-recipient-name');
+        const viewMessageText = document.getElementById('view-message-text');
+        const viewCookieContainer = document.getElementById('view-cookie-container');
+        const spotifyPlayerContainer = document.getElementById('spotify-player-container');
+        const shareLinkInput = document.getElementById('share-link-input');
+        const shareBtn = document.getElementById('share-btn');
+        const backToHomeBtn = document.getElementById('back-to-home-btn');
+        const toastEl = document.getElementById('toast');
+        const tellStoryBtn = document.getElementById('tell-story-btn');
+        const browseStoriesBtn = document.getElementById('browse-stories-btn');
+        const submitNavBtn = document.getElementById('submit-nav-btn');
+        const browseNavBtn = document.getElementById('browse-nav-btn');
+        const historyNavBtn = document.getElementById('history-nav-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const logoBtn = document.getElementById('logo');
+
+        const cookieData = [
+            { id: 'orijinaru', name: 'Classic Orijinaru', img: 'https://iili.io/FL2dlun.png' },
+            { id: 'chokoreto', name: 'Rich Chokorēto', img: 'https://iili.io/FL2dYvt.png' },
+            { id: 'matcha', name: 'Pure Matcha', img: 'https://iili.io/FL2d53N.png' },
+            { id: 'redoberu', name: 'Sweet Redoberu', img: 'https://iili.io/FL2dayX.png' }
+        ];
+
+        let selectedSong = null;
+        let selectedCookieId = 'orijinaru';
+        let currentUserId = null;
+        let allMessagesCache = []; // Cache for message data
+
+        const searchSpotify = async (query) => {
+            if (!query) { songResultsEl.innerHTML = ''; return; }
+            songResultsEl.innerHTML = `<p class="text-gray-500 text-sm p-2">Mencari...</p>`;
+
+            try {
+                const response = await fetch(`${CLOUD_FUNCTION_URL}?query=${encodeURIComponent(query)}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                displaySearchResults(data.tracks.items);
+            } catch (error) {
+                console.error("Error fetching from Spotify API:", error);
+                songResultsEl.innerHTML = `<p class="text-red-500 text-sm p-2">Gagal mencari lagu.</p>`;
+            }
+        };
+
+        const displaySearchResults = (tracks) => {
+            songResultsEl.innerHTML = '';
+            if (!tracks || tracks.length === 0) {
+                songResultsEl.innerHTML = `<p class="text-gray-500 text-sm p-2">Lagu tidak ditemukan.</p>`;
+                return;
+            }
+            tracks.forEach(track => {
+                const trackEl = document.createElement('div');
+                trackEl.className = 'p-2 bg-gray-100 hover:bg-gray-200 rounded-lg cursor-pointer transition flex items-center space-x-3';
+                const artistNames = track.artists.map(artist => artist.name).join(', ');
+                trackEl.innerHTML = `
+                    <img src="${track.album.images[2]?.url || ''}" class="w-10 h-10 rounded-sm">
+                    <div>
+                        <p class="font-semibold">${track.name}</p>
+                        <p class="text-sm text-gray-500">${artistNames}</p>
+                    </div>`;
+                trackEl.onclick = () => selectSong(track);
+                songResultsEl.appendChild(trackEl);
+            });
+        };
+        
+        const selectSong = (track) => {
+            const artistNames = track.artists.map(artist => artist.name).join(', ');
+            selectedSong = {
+                id: track.id,
+                name: track.name,
+                artist: artistNames,
+                image: track.album.images[2]?.url || ''
+            };
+            songSearchInput.value = `${track.name} - ${artistNames}`;
+            songSearchInput.classList.add('bg-green-50', 'text-green-800', 'border-green-400');
+            songResultsEl.innerHTML = '';
+        };
+        
+        const renderCookieOptions = () => {
+            cookieOptionsEl.innerHTML = '';
+            cookieData.forEach(cookie => {
+                const cookieBox = document.createElement('div');
+                cookieBox.className = 'cookie-box border-2 border-gray-200 rounded-lg p-2 text-center cursor-pointer transition';
+                cookieBox.dataset.cookieId = cookie.id;
+                cookieBox.innerHTML = `
+                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
+                    <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
+                cookieBox.addEventListener('click', () => selectCookie(cookie.id));
+                cookieOptionsEl.appendChild(cookieBox);
+            });
+        };
+
+        const selectCookie = (cookieId) => {
+            selectedCookieId = cookieId;
+            document.querySelectorAll('.cookie-box').forEach(box => box.classList.remove('selected'));
+            document.querySelector(`.cookie-box[data-cookie-id="${cookieId}"]`).classList.add('selected');
+        };
+
+        const showToast = (message) => {
+            toastEl.textContent = message;
+            toastEl.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => { toastEl.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+        };
+        
+        const showView = (viewName) => {
+            loadingEl.classList.add('hidden');
+            homeViewEl.classList.add('hidden');
+            historyViewEl.classList.add('hidden');
+            viewMessageEl.classList.add('hidden');
+            
+            if (viewName === 'home') homeViewEl.classList.remove('hidden');
+            else if (viewName === 'history') historyViewEl.classList.remove('hidden');
+            else if (viewName === 'view') viewMessageEl.classList.remove('hidden');
+            else if (viewName === 'loading') loadingEl.classList.remove('hidden');
+        };
+
+        const openCreateModal = () => {
+            createModalEl.classList.remove('hidden');
+            setTimeout(() => {
+                createModalEl.classList.remove('opacity-0');
+                modalContentEl.classList.remove('scale-95');
+            }, 10);
+        };
+
+        const closeCreateModal = () => {
+            createModalEl.classList.add('opacity-0');
+            modalContentEl.classList.add('scale-95');
+            setTimeout(() => { createModalEl.classList.add('hidden'); }, 300);
+        };
+
+        const resetForm = () => {
+            recipientNameInput.value = '';
+            messageTextInput.value = '';
+            songSearchInput.value = '';
+            songSearchInput.classList.remove('bg-green-50', 'text-green-800', 'border-green-400');
+            songResultsEl.innerHTML = '';
+            selectedSong = null;
+            selectCookie('orijinaru');
+        };
+
+        const populateViewMessage = (data) => {
+            const cookie = cookieData.find(c => c.id === data.cookieId) || cookieData[0];
+            viewCookieContainer.innerHTML = `
+                <img src="${cookie.img}" alt="${cookie.name}" class="w-40 h-40 object-cover rounded-full mx-auto shadow-lg border-4 border-white" onerror="this.onerror=null;this.src='https://placehold.co/160x160/FCFDE2/2C6E49?text=Image';">
+                <p class="mt-4 text-xl font-semibold text-gray-700">${cookie.name}</p>`;
+            viewRecipientName.textContent = `Untuk: ${data.to}`;
+            
+            if (data.songId) {
+                const iframe = document.createElement('iframe');
+                iframe.className = 'spotify-embed';
+                iframe.style = "width:100%; height:80px;";
+                iframe.src = `https://open.spotify.com/embed/track/${data.songId}`;
+                iframe.setAttribute('frameBorder', '0');
+                iframe.setAttribute('allowtransparency', 'true');
+                iframe.setAttribute('allow', 'encrypted-media');
+                spotifyPlayerContainer.innerHTML = '';
+                spotifyPlayerContainer.appendChild(iframe);
+            } else {
+                 spotifyPlayerContainer.innerHTML = '';
+            }
+            
+            viewMessageText.textContent = data.message;
+            const link = `${window.location.origin}${window.location.pathname}?id=${data.id}`;
+            shareLinkInput.value = link;
+            showView('view');
+        };
+
+        const handleCreateMessage = async () => {
+            const recipient = recipientNameInput.value.trim();
+            const message = messageTextInput.value.trim();
+            if (!recipient || !message) { alert('Nama penerima dan pesan tidak boleh kosong!'); return; }
+            
+            createBtn.disabled = true;
+            createBtn.textContent = 'Mengirim...';
+
+            try {
+                const docRef = await addDoc(messagesCollection, {
+                    to: recipient, message: message, songId: selectedSong ? selectedSong.id : null,
+                    cookieId: selectedCookieId, createdAt: new Date(),
+                    songInfo: selectedSong // Store song info for grid view
+                });
+                
+                const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+                history.unshift(docRef.id);
+                localStorage.setItem('messageHistory', JSON.stringify(history));
+
+                closeCreateModal();
+                resetForm();
+                showToast('Pesan berhasil dikirim!');
+                renderMessageGridItem({ id: docRef.id, to: recipient, message: message, cookieId: selectedCookieId, songId: selectedSong ? selectedSong.id : null, songInfo: selectedSong }, true);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("Gagal menyimpan pesan. Coba lagi.");
+            } finally {
+                createBtn.disabled = false;
+                createBtn.textContent = 'Kirim Pesan';
+            }
+        };
+        
+        const loadAndDisplayAllMessages = async () => {
+            messageGridEl.innerHTML = '';
+            try {
+                const q = query(messagesCollection, orderBy("createdAt", "desc"), limit(21));
+                const querySnapshot = await getDocs(q);
+                allMessagesCache = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                if (allMessagesCache.length === 0) {
+                    messageGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Belum ada pesan terkirim. Jadilah yang pertama!</p>';
+                } else {
+                    allMessagesCache.forEach((msg) => renderMessageGridItem(msg));
+                }
+            } catch (error) {
+                console.error("Error fetching all messages:", error);
+                messageGridEl.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat pesan.</p>';
+            }
+        };
+
+        const loadAndDisplayHistory = async () => {
+            historyGridEl.innerHTML = '';
+            const historyIds = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+            if (historyIds.length === 0) {
+                historyGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Anda belum pernah mengirim pesan dari perangkat ini.</p>';
+                return;
+            }
+
+            try {
+                const messagePromises = historyIds.map(id => getDoc(doc(db, `artifacts/${appId}/public/data/messages`, id)));
+                const messageDocs = await Promise.all(messagePromises);
+                
+                messageDocs.forEach(docSnap => {
+                    if (docSnap.exists()) {
+                        renderMessageGridItem({ id: docSnap.id, ...docSnap.data() }, false, historyGridEl);
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching history:", error);
+                historyGridEl.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat riwayat.</p>';
+            }
+        };
+
+        const renderMessageGridItem = (message, prepend = false, targetGrid = messageGridEl) => {
+            const messageCard = document.createElement('a');
+            messageCard.href = `?id=${message.id}`;
+            messageCard.className = 'message-card block bg-white p-6 rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer';
+            
+            const songInfo = message.songInfo;
+            const cookieInfo = cookieData.find(c => c.id === message.cookieId) || cookieData[0];
+
+            messageCard.innerHTML = `
+                <div class="h-full flex flex-col justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500">Untuk: ${message.to}</p>
+                        <p class="font-handwriting text-2xl md:text-3xl text-gray-700 mt-2 truncate">${message.message}</p>
+                    </div>
+                    <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+                        <div class="text-xs text-gray-500 truncate pr-2">
+                            ${songInfo ? `<p class="font-semibold">${songInfo.name}</p><p>${songInfo.artist}</p>` : '<p>Tanpa lagu</p>'}
+                        </div>
+                        <img src="${cookieInfo.img}" alt="${cookieInfo.name}" class="w-10 h-10 object-cover rounded-full" onerror="this.onerror=null;this.src='https://placehold.co/40x40/FCFDE2/2C6E49?text=:)';">
+                    </div>
+                </div>`;
+            
+            if (prepend) {
+                targetGrid.prepend(messageCard);
+            } else {
+                targetGrid.appendChild(messageCard);
+            }
+        };
+
+        const router = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const messageId = urlParams.get('id');
+            const page = urlParams.get('page');
+
+            if (messageId) {
+                showView('loading');
+                try {
+                    const docRef = doc(db, `artifacts/${appId}/public/data/messages`, messageId);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        populateViewMessage({ id: docSnap.id, ...docSnap.data() });
+                    } else {
+                        alert("Pesan tidak ditemukan.");
+                        window.location.href = window.location.pathname;
+                    }
+                } catch (error) {
+                    console.error("Error fetching document:", error);
+                    alert("Gagal memuat pesan.");
+                    window.location.href = window.location.pathname;
+                }
+            } else if (page === 'history') {
+                showView('history');
+                await loadAndDisplayHistory();
+            }
+            else {
+                showView('home');
+                await loadAndDisplayAllMessages();
+            }
+        };
+
+        createBtn.addEventListener('click', handleCreateMessage);
+        
+        let searchTimeout;
+        songSearchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => { searchSpotify(songSearchInput.value.trim()); }, 300);
+        });
+        
+        const goHome = (e) => {
+            e.preventDefault();
+            window.location.href = window.location.pathname;
+        };
+
+        backToHomeBtn.addEventListener('click', goHome);
+        logoBtn.addEventListener('click', goHome);
+        browseNavBtn.addEventListener('click', goHome);
+        browseStoriesBtn.addEventListener('click', () => document.getElementById('message-grid-section').scrollIntoView({ behavior: 'smooth' }));
+        
+        historyNavBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = window.location.pathname + '?page=history';
+        });
+
+        shareBtn.addEventListener('click', () => {
+            shareLinkInput.select();
+            try {
+                document.execCommand('copy');
+                showToast('Link berhasil disalin!');
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                showToast('Gagal menyalin link.');
+            }
+        });
+
+        tellStoryBtn.addEventListener('click', openCreateModal);
+        submitNavBtn.addEventListener('click', openCreateModal);
+        closeModalBtn.addEventListener('click', closeCreateModal);
+        createModalEl.addEventListener('click', (e) => { if (e.target === createModalEl) closeCreateModal(); });
+
+        window.addEventListener('popstate', router);
+
+        const init = async () => {
+            showView('loading');
+            renderCookieOptions();
+            selectCookie('orijinaru');
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUserId = user.uid;
+                    await router();
+                } else {
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Anonymous sign-in failed:", error);
+                        await router();
+                    }
+                }
+            });
+        };
+
+        init();
+    </script>
+</body>
+</html>
