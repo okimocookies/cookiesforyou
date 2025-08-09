@@ -156,22 +156,31 @@
             </div>
 
             <!-- View Message View -->
-            <div id="view-message" class="hidden max-w-2xl mx-auto py-12 space-y-8">
-                 <div id="view-cookie-container" class="text-center"></div>
-                <h3 class="text-3xl font-bold text-center text-[#2C6E49]" id="view-recipient-name"></h3>
-                <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-sm">
-                    <p id="view-message-text" class="text-2xl font-handwriting leading-relaxed text-gray-700"></p>
-                </div>
-                <div id="spotify-player-container"></div>
-                <div class="space-y-3 pt-4">
-                    <div class="relative">
-                        <input type="text" id="share-link-input" readonly class="w-full bg-gray-100 border border-gray-300 rounded-lg pl-3 pr-20 py-2 text-gray-500">
-                        <button id="share-btn" class="absolute inset-y-0 right-0 flex items-center px-4 bg-[#4C956C] hover:bg-[#2C6E49] text-white font-semibold rounded-r-lg text-sm">Salin</button>
+            <div id="view-message" class="hidden justify-center items-center py-12">
+                 <div class="w-full max-w-sm mx-auto">
+                    <div id="view-card" class="bg-[#2C6E49] rounded-2xl shadow-2xl p-6 text-white relative overflow-hidden space-y-6">
+                        <div class="relative h-48">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-64 h-64 bg-[#4C956C] rounded-full"></div>
+                            </div>
+                            <img id="view-cookie-img" src="" alt="" class="absolute inset-0 w-48 h-48 m-auto object-cover rounded-full">
+                        </div>
+                        <div class="text-center space-y-4">
+                            <div>
+                                <p id="view-cookie-name" class="font-bold tracking-wider uppercase"></p>
+                                <p id="view-recipient-name" class="text-2xl font-semibold"></p>
+                            </div>
+                            <p id="view-message-text" class="font-handwriting text-4xl leading-tight"></p>
+                        </div>
+                        <div id="spotify-player-container"></div>
+                        <button id="share-btn" class="w-full bg-gray-100 text-gray-800 font-bold py-3 px-4 rounded-lg hover:bg-gray-200 transition">
+                            Share
+                        </button>
                     </div>
-                    <button id="back-to-home-btn" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
-                        Kembali ke Beranda
+                    <button id="back-to-home-btn" class="w-full mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300">
+                        Kembali
                     </button>
-                </div>
+                 </div>
             </div>
         </main>
 
@@ -248,9 +257,9 @@
         
         const viewRecipientName = document.getElementById('view-recipient-name');
         const viewMessageText = document.getElementById('view-message-text');
-        const viewCookieContainer = document.getElementById('view-cookie-container');
+        const viewCookieImg = document.getElementById('view-cookie-img');
+        const viewCookieName = document.getElementById('view-cookie-name');
         const spotifyPlayerContainer = document.getElementById('spotify-player-container');
-        const shareLinkInput = document.getElementById('share-link-input');
         const shareBtn = document.getElementById('share-btn');
         const backToHomeBtn = document.getElementById('back-to-home-btn');
         const toastEl = document.getElementById('toast');
@@ -360,11 +369,15 @@
             loadingEl.classList.add('hidden');
             homeViewEl.classList.add('hidden');
             gridViewEl.classList.add('hidden');
+            viewMessageEl.classList.remove('flex');
             viewMessageEl.classList.add('hidden');
             
             if (viewName === 'home') homeViewEl.classList.remove('hidden');
             else if (viewName === 'grid') gridViewEl.classList.remove('hidden');
-            else if (viewName === 'view') viewMessageEl.classList.remove('hidden');
+            else if (viewName === 'view') {
+                viewMessageEl.classList.remove('hidden');
+                viewMessageEl.classList.add('flex');
+            }
             else if (viewName === 'loading') loadingEl.classList.remove('hidden');
         };
 
@@ -395,10 +408,10 @@
 
         const populateViewMessage = (data) => {
             const cookie = cookieData.find(c => c.id === data.cookie_id) || cookieData[0];
-            viewCookieContainer.innerHTML = `
-                <img src="${cookie.img}" alt="${cookie.name}" class="w-40 h-40 object-cover rounded-full mx-auto shadow-lg border-4 border-white" onerror="this.onerror=null;this.src='https://placehold.co/160x160/FCFDE2/2C6E49?text=Image';">
-                <p class="mt-4 text-xl font-semibold text-gray-700">${cookie.name}</p>`;
-            viewRecipientName.textContent = `Untuk: ${data.to}`;
+            viewCookieImg.src = cookie.img;
+            viewCookieImg.alt = cookie.name;
+            viewCookieName.textContent = `RASA COOKIESNYA: ${cookie.name}`;
+            viewRecipientName.textContent = `UNTUK: ${data.to}`;
             
             if (data.song_id) {
                 const iframe = document.createElement('iframe');
@@ -415,8 +428,6 @@
             }
             
             viewMessageText.textContent = data.message;
-            const link = `${window.location.origin}${window.location.pathname}?id=${data.id}`;
-            shareLinkInput.value = link;
             showView('view');
         };
 
@@ -630,14 +641,13 @@
 
 
         shareBtn.addEventListener('click', () => {
-            shareLinkInput.select();
-            try {
-                document.execCommand('copy');
+            const linkToCopy = `${window.location.origin}${window.location.pathname}?id=${new URLSearchParams(window.location.search).get('id')}`;
+            navigator.clipboard.writeText(linkToCopy).then(() => {
                 showToast('Link berhasil disalin!', 'success');
-            } catch (err) {
+            }, (err) => {
                 console.error('Fallback: Oops, unable to copy', err);
                 showToast('Gagal menyalin link.', 'error');
-            }
+            });
         });
         
         const openMobileMenu = () => mobileMenu.classList.remove('hidden');
