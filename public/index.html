@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookies For You</title>
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Caveat:wght@500&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Caveat:wght@500&display=swap)" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Caveat:wght@500&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -39,7 +39,7 @@
             position: relative;
             overflow: hidden;
             background-color: #2C6E49;
-            color: white;
+            color: #FCFDE2;
         }
         .message-card::after {
             content: '';
@@ -76,7 +76,7 @@
         <header class="p-4 md:p-6 max-w-6xl mx-auto w-full">
             <div class="flex justify-between items-center">
                 <a href="/" id="logo" class="flex items-center gap-2 font-bold text-lg tracking-tighter text-[#2C6E49]">
-                    <img src="[https://iili.io/FLKNqzb.png](https://iili.io/FLKNqzb.png)" alt="Okimo Cookies Logo" class="h-8 w-8">
+                    <img src="https://iili.io/FLKNqzb.png" alt="Okimo Cookies Logo" class="h-8 w-18">
                     <span>cookiesforyou</span>
                 </a>
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
@@ -90,7 +90,7 @@
         <main class="px-4 md:px-6 max-w-6xl mx-auto w-full flex-grow">
             <!-- Loading Spinner -->
             <div id="loading" class="text-center hidden py-20">
-                <svg class="animate-spin h-8 w-8 text-gray-600 mx-auto" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" fill="none" viewBox="0 0 24 24">
+                <svg class="animate-spin h-8 w-8 text-gray-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -178,8 +178,8 @@
         
         <footer class="p-4 md:p-6 max-w-6xl mx-auto w-full mt-12">
             <div class="text-center text-gray-500">
-                <a href="[https://instagram.com/okimo.cookies](https://instagram.com/okimo.cookies)" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#2C6E49] transition">
-                    <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="20" height="20" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+                <a href="https://instagram.com/okimo.cookies" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#2C6E49] transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
                         <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.917 3.917 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.703.01 5.556 0 5.829 0 8s.01 2.444.048 3.297c.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.556 15.99 5.829 16 8 16s2.444-.01 3.297-.048c.852-.04 1.433-.174 1.942-.372.526-.205.972-.478 1.417-.923.445-.444.718-.891.923-1.417.198-.51.333-1.09.372-1.942C15.99 10.444 16 10.171 16 8s-.01-2.444-.048-3.297c-.04-.852-.174-1.433-.372-1.942a3.916 3.916 0 0 0-.923-1.417A3.916 3.916 0 0 0 13.24.42c-.51-.198-1.092-.333-1.942-.372C10.444.01 10.171 0 8 0zm0 1.44c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.282.24.705.275 1.486.039.843.047 1.096.047 3.232s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.486a2.47 2.47 0 0 1-.599.92c-.28.28-.546.453-.92.598-.282.11-.705.24-1.486.275-.843.038-1.096.047-3.232.047s-2.389-.009-3.232-.047c-.78-.036-1.203-.166-1.486-.275a2.47 2.47 0 0 1-.92-.599 2.47 2.47 0 0 1-.598-.92c-.11-.282-.24-.705-.275-1.486-.038-.843-.046-1.096-.046-3.232s.008-2.389.046-3.232c.036-.78.166-1.204.275-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.486-.275.843-.038 1.096-.047 3.232-.047z"/>
                         <path d="M8 4.868a3.132 3.132 0 1 0 0 6.264 3.132 3.132 0 0 0 0-6.264zM8 6.31a1.69 1.69 0 1 1 0 3.38 1.69 1.69 0 0 1 0-3.38z"/>
                         <path d="M12.5 3.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
@@ -191,6 +191,7 @@
     </div>
 
     <script type="module">
+        // This is a PREVIEW-ONLY version. The backend is simulated.
         const loadingEl = document.getElementById('loading');
         const homeViewEl = document.getElementById('home-view');
         const historyViewEl = document.getElementById('history-view');
@@ -225,28 +226,37 @@
         const logoBtn = document.getElementById('logo');
 
         const cookieData = [
-            { id: 'orijinaru', name: 'Classic Orijinaru', img: '[https://iili.io/FL2dlun.png](https://iili.io/FL2dlun.png)' },
-            { id: 'chokoreto', name: 'Rich Chokorēto', img: '[https://iili.io/FL2dYvt.png](https://iili.io/FL2dYvt.png)' },
-            { id: 'matcha', name: 'Pure Matcha', img: '[https://iili.io/FL2d53N.png](https://iili.io/FL2d53N.png)' },
-            { id: 'redoberu', name: 'Sweet Redoberu', img: '[https://iili.io/FL2dayX.png](https://iili.io/FL2dayX.png)' }
+            { id: 'orijinaru', name: 'Classic Orijinaru', img: 'https://iili.io/FL2dlun.png' },
+            { id: 'chokoreto', name: 'Rich Chokorēto', img: 'https://iili.io/FL2dYvt.png' },
+            { id: 'matcha', name: 'Pure Matcha', img: 'https://iili.io/FL2d53N.png' },
+            { id: 'redoberu', name: 'Sweet Redoberu', img: 'https://iili.io/FL2dayX.png' }
         ];
 
         let selectedSong = null;
         let selectedCookieId = 'orijinaru';
+        
+        // --- SIMULATED BACKEND & DATABASE ---
+        let messagesCache = [
+            { id: '1', to: 'Someone', message: 'This is a sample message!', cookieId: 'orijinaru', songId: '4u7EnebtmKWzANvK9IyJIm', songInfo: { name: 'Here Comes The Sun', artist: 'The Beatles' } },
+            { id: '2', to: 'You', message: 'Hope you like this cookie. This is a slightly longer message to test how the font size adjusts to fit more content inside the card.', cookieId: 'chokoreto', songId: null, songInfo: null },
+            { id: '3', to: 'Them', message: 'Just for you.', cookieId: 'matcha', songId: '7tFiyTwD0nx5a1eklYtX2J', songInfo: { name: 'Bohemian Rhapsody', artist: 'Queen' } },
+             { id: '4', to: 'Friend', message: 'This is an extremely long message designed specifically to test the dynamic font resizing feature to ensure that all the text remains visible within the card without overflowing or being truncated, which would be a bad user experience.', cookieId: 'redoberu', songId: null, songInfo: null },
+        ];
 
-        const searchSpotify = async (query) => {
+        const mockSpotifyData = [
+            { id: '4u7EnebtmKWzANvK9IyJIm', name: 'Here Comes The Sun', artists: [{name: 'The Beatles'}], album: {images: [{},{},{url: 'https://i.scdn.co/image/ab67616d00004851b493e23a81a0b6d2a76a5f87'}]} },
+            { id: '7tFiyTwD0nx5a1eklYtX2J', name: 'Bohemian Rhapsody', artists: [{name: 'Queen'}], album: {images: [{},{},{url: 'https://i.scdn.co/image/ab67616d00004851e332c1c7a848b5a75879b343'}]} },
+            { id: '3S4pxd2gu4aG3aL4n1hvyM', name: 'Hotel California', artists: [{name: 'Eagles'}], album: {images: [{},{},{url: 'https://i.scdn.co/image/ab67616d000048515359343393b795a98a005002'}]} }
+        ];
+        
+        const searchSpotify = (query) => {
             if (!query) { songResultsEl.innerHTML = ''; return; }
-            songResultsEl.innerHTML = `<p class="text-gray-500 text-sm p-2">Mencari...</p>`;
-            try {
-                const response = await fetch(`/api/searchSpotify?query=${encodeURIComponent(query)}`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
-                displaySearchResults(data.tracks.items);
-            } catch (error) {
-                console.error("Error fetching from Spotify API:", error);
-                songResultsEl.innerHTML = `<p class="text-red-500 text-sm p-2">Gagal mencari lagu.</p>`;
-            }
+            const results = mockSpotifyData.filter(track => 
+                track.name.toLowerCase().includes(query.toLowerCase())
+            );
+            displaySearchResults(results);
         };
+        // --- END OF SIMULATION ---
 
         const displaySearchResults = (tracks) => {
             songResultsEl.innerHTML = '';
@@ -286,7 +296,7 @@
                 cookieBox.className = 'cookie-box border-2 border-gray-200 rounded-lg p-2 text-center cursor-pointer transition';
                 cookieBox.dataset.cookieId = cookie.id;
                 cookieBox.innerHTML = `
-                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='[https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found](https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found)';">
+                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
                     <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
                 cookieBox.addEventListener('click', () => selectCookie(cookie.id));
                 cookieOptionsEl.appendChild(cookieBox);
@@ -343,17 +353,17 @@
         };
 
         const populateViewMessage = (data) => {
-            const cookie = cookieData.find(c => c.id === data.cookie_id) || cookieData[0];
+            const cookie = cookieData.find(c => c.id === data.cookieId) || cookieData[0];
             viewCookieContainer.innerHTML = `
-                <img src="${cookie.img}" alt="${cookie.name}" class="w-40 h-40 object-cover rounded-full mx-auto shadow-lg border-4 border-white" onerror="this.onerror=null;this.src='[https://placehold.co/160x160/FCFDE2/2C6E49?text=Image](https://placehold.co/160x160/FCFDE2/2C6E49?text=Image)';">
+                <img src="${cookie.img}" alt="${cookie.name}" class="w-40 h-40 object-cover rounded-full mx-auto shadow-lg border-4 border-white" onerror="this.onerror=null;this.src='https://placehold.co/160x160/FCFDE2/2C6E49?text=Image';">
                 <p class="mt-4 text-xl font-semibold text-gray-700">${cookie.name}</p>`;
             viewRecipientName.textContent = `Untuk: ${data.to}`;
             
-            if (data.song_id) {
+            if (data.songId) {
                 const iframe = document.createElement('iframe');
                 iframe.className = 'spotify-embed';
                 iframe.style = "width:100%; height:80px;";
-                iframe.src = `https://open.spotify.com/embed/track/${data.song_id}`;
+                iframe.src = `https://open.spotify.com/embed/track/${data.songId}`;
                 iframe.setAttribute('frameBorder', '0');
                 iframe.setAttribute('allowtransparency', 'true');
                 iframe.setAttribute('allow', 'encrypted-media');
@@ -369,62 +379,47 @@
             showView('view');
         };
 
-        const handleCreateMessage = async () => {
+        const handleCreateMessage = () => {
             const recipient = recipientNameInput.value.trim();
             const message = messageTextInput.value.trim();
             if (!recipient || !message) { alert('Nama penerima dan pesan tidak boleh kosong!'); return; }
             
             createBtn.disabled = true;
             createBtn.textContent = 'Mengirim...';
-
-            try {
-                const response = await fetch('/api/saveMessage', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        to: recipient, message: message, songId: selectedSong ? selectedSong.id : null,
-                        cookieId: selectedCookieId, songInfo: selectedSong
-                    })
-                });
-                if (!response.ok) throw new Error('Failed to save message');
-                const result = await response.json();
-
+            
+            setTimeout(() => {
+                const newId = Date.now().toString();
+                const newMessage = {
+                    id: newId, to: recipient, message: message, songId: selectedSong ? selectedSong.id : null,
+                    cookieId: selectedCookieId, songInfo: selectedSong
+                };
+                
+                messagesCache.unshift(newMessage);
+                
                 const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
-                history.unshift(result.id);
+                history.unshift(newId);
                 localStorage.setItem('messageHistory', JSON.stringify(history));
 
                 closeCreateModal();
                 resetForm();
                 showToast('Pesan berhasil dikirim!');
-                renderMessageGridItem({ id: result.id, to: recipient, message: message, cookie_id: selectedCookieId, song_id: selectedSong ? selectedSong.id : null, songInfo: selectedSong }, true);
-            } catch (e) {
-                console.error("Error creating message:", e);
-                alert("Gagal menyimpan pesan. Coba lagi.");
-            } finally {
+                renderMessageGridItem(newMessage, true);
+                
                 createBtn.disabled = false;
                 createBtn.textContent = 'Kirim Pesan';
-            }
+            }, 1000);
         };
         
-        const loadAndDisplayAllMessages = async () => {
+        const loadAndDisplayAllMessages = () => {
             messageGridEl.innerHTML = '';
-            try {
-                const response = await fetch('/api/getMessages');
-                if (!response.ok) throw new Error('Failed to fetch messages');
-                const messages = await response.json();
-
-                if (messages.length === 0) {
-                    messageGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Belum ada pesan terkirim. Jadilah yang pertama!</p>';
-                } else {
-                    messages.forEach((msg) => renderMessageGridItem(msg));
-                }
-            } catch (error) {
-                console.error("Error fetching messages:", error);
-                messageGridEl.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat pesan.</p>';
+            if (messagesCache.length === 0) {
+                messageGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Belum ada pesan terkirim. Jadilah yang pertama!</p>';
+            } else {
+                messagesCache.forEach((msg) => renderMessageGridItem(msg));
             }
         };
 
-        const loadAndDisplayHistory = async () => {
+        const loadAndDisplayHistory = () => {
             historyGridEl.innerHTML = '';
             const historyIds = JSON.parse(localStorage.getItem('messageHistory') || '[]');
             if (historyIds.length === 0) {
@@ -432,20 +427,13 @@
                 return;
             }
 
-            try {
-                const messagePromises = historyIds.map(async (id) => {
-                    const res = await fetch(`/api/getMessage?id=${id}`);
-                    return res.ok ? res.json() : null;
-                });
-                const messages = (await Promise.all(messagePromises)).filter(Boolean);
+            const historyMessages = historyIds
+                .map(id => messagesCache.find(msg => msg.id === id))
+                .filter(Boolean);
                 
-                messages.forEach(msg => {
-                    renderMessageGridItem(msg, false, historyGridEl);
-                });
-            } catch (error) {
-                console.error("Error fetching history:", error);
-                historyGridEl.innerHTML = '<p class="text-red-500 text-center col-span-full">Gagal memuat riwayat.</p>';
-            }
+            historyMessages.forEach(msg => {
+                renderMessageGridItem(msg, false, historyGridEl);
+            });
         };
 
         const renderMessageGridItem = (message, prepend = false, targetGrid = messageGridEl) => {
@@ -454,7 +442,7 @@
             messageCard.className = 'message-card block h-48 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer';
             
             const songInfo = message.songInfo;
-            const cookieInfo = cookieData.find(c => c.id === message.cookie_id) || cookieData[0];
+            const cookieInfo = cookieData.find(c => c.id === message.cookieId) || cookieData[0];
 
             let fontSizeClass = 'text-3xl';
             if (message.message.length > 80) {
@@ -475,7 +463,7 @@
                         ${songInfo ? `<p class="font-semibold">${songInfo.name}</p><p>${songInfo.artist}</p>` : ''}
                     </div>
                 </div>
-                <img src="${cookieInfo.img}" alt="${cookieInfo.name}" class="message-card-cookie-img" onerror="this.onerror=null;this.src='[https://placehold.co/130x130/FCFDE2/2C6E49?text=](https://placehold.co/130x130/FCFDE2/2C6E49?text=):)';">
+                <img src="${cookieInfo.img}" alt="${cookieInfo.name}" class="message-card-cookie-img" onerror="this.onerror=null;this.src='https://placehold.co/130x130/FCFDE2/2C6E49?text=:)';">
             `;
             
             if (prepend) {
@@ -485,28 +473,28 @@
             }
         };
 
-        const router = async () => {
+        const router = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const messageId = urlParams.get('id');
             const page = urlParams.get('page');
 
             if (messageId) {
                 showView('loading');
-                try {
-                    const response = await fetch(`/api/getMessage?id=${messageId}`);
-                    if (!response.ok) throw new Error('Message not found');
-                    const message = await response.json();
-                    populateViewMessage(message);
-                } catch (error) {
-                    alert("Pesan tidak ditemukan.");
-                    window.location.href = window.location.pathname;
-                }
+                setTimeout(() => {
+                    const message = messagesCache.find(m => m.id === messageId);
+                    if (message) {
+                        populateViewMessage(message);
+                    } else {
+                        alert("Pesan tidak ditemukan.");
+                        window.location.href = window.location.pathname;
+                    }
+                }, 500);
             } else if (page === 'history') {
                 showView('history');
-                await loadAndDisplayHistory();
+                loadAndDisplayHistory();
             } else {
                 showView('home');
-                await loadAndDisplayAllMessages();
+                loadAndDisplayAllMessages();
             }
         };
 
@@ -562,7 +550,7 @@
             showView('loading');
             renderCookieOptions();
             selectCookie('orijinaru');
-            router();
+            setTimeout(() => router(), 500);
         };
 
         init();
