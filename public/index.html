@@ -179,6 +179,8 @@
             </div>
         </div>
         
+        <div id="toast" class="fixed bottom-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300"></div>
+
         <footer class="p-4 md:p-6 max-w-6xl mx-auto w-full mt-12">
             <div class="text-center text-gray-500">
                 <a href="https://instagram.com/okimo.cookies" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#2C6E49] transition">
@@ -304,8 +306,10 @@
             document.querySelector(`.cookie-box[data-cookie-id="${cookieId}"]`).classList.add('selected');
         };
 
-        const showToast = (message) => {
+        const showToast = (message, status = 'success') => {
             toastEl.textContent = message;
+            toastEl.classList.remove('bg-green-500', 'bg-red-500');
+            toastEl.classList.add(status === 'success' ? 'bg-green-500' : 'bg-red-500');
             toastEl.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => { toastEl.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         };
@@ -377,10 +381,13 @@
         const handleCreateMessage = async () => {
             const recipient = recipientNameInput.value.trim();
             const message = messageTextInput.value.trim();
-            if (!recipient || !message) { alert('Nama penerima dan pesan tidak boleh kosong!'); return; }
+            if (!recipient || !message) { 
+                showToast('Nama dan pesan tidak boleh kosong.', 'error');
+                return; 
+            }
             
             createBtn.disabled = true;
-            createBtn.textContent = 'Mengirim...';
+            createBtn.innerHTML = 'Mengirim...';
 
             try {
                 const response = await fetch('/api/saveMessage', {
@@ -398,26 +405,33 @@
                 history.unshift(result.id);
                 localStorage.setItem('messageHistory', JSON.stringify(history));
 
-                closeCreateModal();
-                resetForm();
-                showToast('Pesan berhasil dikirim!');
-                await loadAndDisplayAllMessages();
+                createBtn.innerHTML = `<svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+
+                setTimeout(async () => {
+                    closeCreateModal();
+                    await loadAndDisplayAllMessages();
+                    showToast('Pesan berhasil dikirim!', 'success');
+                    resetForm();
+                    createBtn.disabled = false;
+                    createBtn.innerHTML = 'Kirim Pesan';
+                }, 1500);
+
             } catch (e) {
                 console.error("Error creating message:", e);
-                alert("Gagal menyimpan pesan. Coba lagi.");
-            } finally {
+                showToast('Gagal menyimpan pesan. Coba lagi.', 'error');
                 createBtn.disabled = false;
-                createBtn.textContent = 'Kirim Pesan';
+                createBtn.innerHTML = 'Kirim Pesan';
             }
         };
         
         const loadAndDisplayAllMessages = async (filter = '') => {
             messageGridEl.innerHTML = '';
             try {
-                // Always fetch fresh data for the main view
-                const response = await fetch('/api/getMessages');
-                if (!response.ok) throw new Error('Failed to fetch messages');
-                allMessagesCache = await response.json();
+                if (allMessagesCache.length === 0 || filter === '') {
+                    const response = await fetch('/api/getMessages');
+                    if (!response.ok) throw new Error('Failed to fetch messages');
+                    allMessagesCache = await response.json();
+                }
 
                 const filteredMessages = allMessagesCache.filter(msg => 
                     msg.to.toLowerCase().includes(filter.toLowerCase())
@@ -558,10 +572,10 @@
             shareLinkInput.select();
             try {
                 document.execCommand('copy');
-                showToast('Link berhasil disalin!');
+                showToast('Link berhasil disalin!', 'success');
             } catch (err) {
                 console.error('Fallback: Oops, unable to copy', err);
-                showToast('Gagal menyalin link.');
+                showToast('Gagal menyalin link.', 'error');
             }
         });
 
