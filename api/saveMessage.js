@@ -5,13 +5,18 @@ const pool = new Pool({
 });
 
 export default async function handler(request, response) {
+    // FIX: Menambahkan header CORS untuk mengizinkan permintaan POST
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (request.method === 'OPTIONS') {
+        return response.status(200).end();
+    }
+    
     if (request.method !== 'POST') {
         return response.status(405).json({ message: 'Method Not Allowed' });
     }
-    // Add CORS headers for POST
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
 
     const { to, message, songId, cookieId, songInfo } = request.body;
 
@@ -29,6 +34,6 @@ export default async function handler(request, response) {
         return response.status(200).json({ id: newId });
     } catch (error) {
         console.error('Error saving message:', error);
-        return response.status(500).json({ message: "Error saving message" });
+        return response.status(500).json({ message: "Error saving message", details: error.message });
     }
 }
