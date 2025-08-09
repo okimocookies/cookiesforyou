@@ -76,7 +76,7 @@
         <header class="p-4 md:p-6 max-w-6xl mx-auto w-full">
             <div class="flex justify-between items-center">
                 <a href="/" id="logo" class="flex items-center gap-2 font-bold text-lg tracking-tighter text-[#2C6E49]">
-                    <img src="https://iili.io/FLKNqzb.png" alt="Okimo Cookies Logo" class="h-8 w-20">
+                    <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-8">
                     <span>cookiesforyou</span>
                 </a>
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
@@ -101,15 +101,18 @@
             <div id="home-view" class="space-y-12 hidden">
                 <section class="text-center py-12 md:py-20">
                     <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-[#2C6E49]">A bunch of the untold words,</h1>
-                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight text-gray-400">sweetened with cookies & songs</h2>
-                    <p class="mt-6 max-w-2xl mx-auto text-gray-600">Express your untold feelings with Okimo Cookies and music.</p>
-                    <div class="mt-8 flex justify-center items-center space-x-4">
-                        <button id="tell-story-btn" class="bg-[#2C6E49] text-white font-semibold py-2 px-6 rounded-lg hover:bg-[#4C956C] transition">Tell Your Story</button>
-                        <button id="browse-stories-btn" class="font-semibold py-2 px-6 rounded-lg border border-gray-300 hover:bg-gray-100 transition">Browse the Stories</button>
+                    <h2 class="text-3xl md:text-5xl font-bold tracking-tight" style="color: #4C956C;">sweetened with cookies & songs</h2>
+                    <p class="mt-6 max-w-2xl mx-auto text-gray-500">Express your untold feelings with Okimo Cookies and music.</p>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button id="tell-story-btn" class="bg-[#2C6E49] text-white font-semibold py-3 px-8 rounded-lg hover:bg-[#4C956C] transition w-full sm:w-auto">Tell Your Story</button>
+                        <button id="browse-stories-btn" class="font-semibold py-3 px-8 rounded-lg border border-gray-300 hover:bg-gray-100 transition w-full sm:w-auto">Browse the Stories</button>
                     </div>
                 </section>
                 
                 <section id="message-grid-section">
+                    <div class="mb-8 max-w-xl mx-auto">
+                         <input type="text" id="name-search" class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#4C956C] focus:outline-none transition" placeholder="Cari berdasarkan nama penerima...">
+                    </div>
                     <div id="message-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
                 </section>
             </div>
@@ -207,6 +210,7 @@
         const createBtn = document.getElementById('create-btn');
         const messageGridEl = document.getElementById('message-grid');
         const historyGridEl = document.getElementById('history-grid');
+        const nameSearchInput = document.getElementById('name-search');
         
         const viewRecipientName = document.getElementById('view-recipient-name');
         const viewMessageText = document.getElementById('view-message-text');
@@ -233,6 +237,7 @@
 
         let selectedSong = null;
         let selectedCookieId = 'orijinaru';
+        let allMessagesCache = [];
 
         const searchSpotify = async (query) => {
             if (!query) { songResultsEl.innerHTML = ''; return; }
@@ -396,7 +401,7 @@
                 closeCreateModal();
                 resetForm();
                 showToast('Pesan berhasil dikirim!');
-                await loadAndDisplayAllMessages(); // FIX: Reload messages after sending
+                await loadAndDisplayAllMessages();
             } catch (e) {
                 console.error("Error creating message:", e);
                 alert("Gagal menyimpan pesan. Coba lagi.");
@@ -406,17 +411,22 @@
             }
         };
         
-        const loadAndDisplayAllMessages = async () => {
+        const loadAndDisplayAllMessages = async (filter = '') => {
             messageGridEl.innerHTML = '';
             try {
+                // Always fetch fresh data for the main view
                 const response = await fetch('/api/getMessages');
                 if (!response.ok) throw new Error('Failed to fetch messages');
-                const messages = await response.json();
+                allMessagesCache = await response.json();
 
-                if (messages.length === 0) {
-                    messageGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Belum ada pesan terkirim. Jadilah yang pertama!</p>';
+                const filteredMessages = allMessagesCache.filter(msg => 
+                    msg.to.toLowerCase().includes(filter.toLowerCase())
+                );
+
+                if (filteredMessages.length === 0) {
+                    messageGridEl.innerHTML = '<p class="text-gray-500 text-center col-span-full">Tidak ada pesan yang cocok.</p>';
                 } else {
-                    messages.forEach((msg) => renderMessageGridItem(msg));
+                    filteredMessages.forEach((msg) => renderMessageGridItem(msg));
                 }
             } catch (error) {
                 console.error("Error fetching messages:", error);
@@ -520,6 +530,10 @@
         songSearchInput.addEventListener('input', () => {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => { searchSpotify(songSearchInput.value.trim()); }, 300);
+        });
+
+        nameSearchInput.addEventListener('input', (e) => {
+            loadAndDisplayAllMessages(e.target.value);
         });
         
         const goHome = (e) => {
