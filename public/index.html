@@ -353,7 +353,7 @@
                     <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
                     <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
                 cookieBox.addEventListener('click', (e) => {
-                    e.preventDefault(); // Prevent navigation
+                    e.preventDefault();
                     selectCookie(cookie.id);
                     window.open(cookieBox.href, '_blank');
                 });
