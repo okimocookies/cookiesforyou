@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FCFDE2;
+            background-color: #ffffff;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -62,8 +62,8 @@
         }
         .message-card-cookie-img {
             position: absolute;
-            width: 180px;
-            height: 180px;
+            width: 240px;
+            height: 240px;
             right: -90px;
             top: 50%;
             transform: translateY(-50%);
@@ -84,7 +84,7 @@
             <div class="flex justify-between items-center">
                 <a href="/" id="logo" class="flex items-center gap-2 font-bold text-lg tracking-tighter text-[#2C6E49]">
                     <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-auto">
-                    <span class="font-handwriting text-3xl">cookiesforyou</span>
+                    <span class="font-medium text-xl">#cookiesforyou</span>
                 </a>
                 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
                     <a href="#" id="submit-nav-btn" class="hover:text-[#2C6E49] cursor-pointer">Submit</a>
@@ -562,11 +562,11 @@ const populateViewMessage = (data) => {
                 <div class="h-full flex flex-col justify-between p-6 w-2/3">
                     <div class="flex-grow flex items-center">
                         <div>
-                            <p class="text-sm text-slate-200">Untuk: ${message.to}</p>
+                            <p class="text-sm text-white-200">Untuk: ${message.to}</p>
                             <p class="font-handwriting text-3xl text-white mt-2 message-content">${truncatedMessage}</p>
                         </div>
                     </div>
-                    <div class="text-xs text-slate-300 truncate pr-2 pt-2">
+                    <div class="text-xs text-white-300 truncate pr-2 pt-2">
                         ${songInfo ? `<p class="font-semibold">${songInfo.name}</p><p>${songInfo.artist}</p>` : ''}
                     </div>
                 </div>
