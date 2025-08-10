@@ -343,22 +343,23 @@
         const renderCookieOptions = () => {
             cookieOptionsEl.innerHTML = '';
             cookieData.forEach(cookie => {
-                const cookieBox = document.createElement('div'); // ganti <a> jadi <div>
+                const cookieBox = document.createElement('a');
+                cookieBox.href = "https://shopee.co.id/Soft-Baked-Cookies-Premium-Hampers-Gift-by-Okimo-Cookies-(order-min.-2-pcs)-Beli-4-Lebih-Hemat-i.1483970996.26778195387";
+                cookieBox.target = "_blank";
+                cookieBox.rel = "noopener noreferrer";
                 cookieBox.className = 'cookie-box border-2 border-gray-200 rounded-lg p-2 text-center cursor-pointer transition';
                 cookieBox.dataset.cookieId = cookie.id;
                 cookieBox.innerHTML = `
-                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" 
-                        onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
+                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
                     <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
-                
-                cookieBox.addEventListener('click', () => {
-                    selectCookie(cookie.id); // cuma jalankan fungsi pilih cookie
+                cookieBox.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent navigation
+                    selectCookie(cookie.id);
+                    window.open(cookieBox.href, '_blank');
                 });
-
                 cookieOptionsEl.appendChild(cookieBox);
             });
         };
-
 
         const selectCookie = (cookieId) => {
             selectedCookieId = cookieId;
@@ -541,19 +542,19 @@
             const songInfo = message.songInfo;
             const cookieInfo = cookieData.find(c => c.id === message.cookie_id) || cookieData[0];
 
-            if (message.message.length > 150) {
-            fontSizeClass = "text-lg";
-            } else {
-            fontSizeClass = "text-xl";
+            let fontSizeClass = 'text-3xl';
+            if (message.message.length > 80) {
+                fontSizeClass = 'text-xl';
+            } else if (message.message.length > 40) {
+                fontSizeClass = 'text-2xl';
             }
-
 
             messageCard.innerHTML = `
                 <div class="h-full flex flex-col justify-between p-6 w-2/3">
                     <div class="flex-grow flex items-center">
                         <div>
                             <p class="text-sm text-slate-200">Untuk: ${message.to}</p>
-                            <p class="font-handwriting ${fontSizeClass} text-white mt-2 message-content">${message.message.length > 50 ? message.message.substring(0, 50) + "..." : message.message}</p>
+                            <p class="font-handwriting ${fontSizeClass} text-white mt-2 message-content">${message.message}</p>
                         </div>
                     </div>
                     <div class="text-xs text-slate-300 truncate pr-2 pt-2">
