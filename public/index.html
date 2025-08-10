@@ -343,22 +343,22 @@
         const renderCookieOptions = () => {
             cookieOptionsEl.innerHTML = '';
             cookieData.forEach(cookie => {
-                const cookieBox = document.createElement('a');
-                cookieBox.target = "_blank";
-                cookieBox.rel = "noopener noreferrer";
+                const cookieBox = document.createElement('div'); // ganti <a> jadi <div>
                 cookieBox.className = 'cookie-box border-2 border-gray-200 rounded-lg p-2 text-center cursor-pointer transition';
                 cookieBox.dataset.cookieId = cookie.id;
                 cookieBox.innerHTML = `
-                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
+                    <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" 
+                        onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
                     <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
-                cookieBox.addEventListener('click', (e) => {
-                    e.preventDefault(); // Prevent navigation
-                    selectCookie(cookie.id);
-                    window.open(cookieBox.href, '_blank');
+                
+                cookieBox.addEventListener('click', () => {
+                    selectCookie(cookie.id); // cuma jalankan fungsi pilih cookie
                 });
+
                 cookieOptionsEl.appendChild(cookieBox);
             });
         };
+
 
         const selectCookie = (cookieId) => {
             selectedCookieId = cookieId;
