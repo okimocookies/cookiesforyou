@@ -163,7 +163,9 @@
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-48 h-48 bg-[#4C956C] rounded-full"></div>
                             </div>
-                            <img id="view-cookie-img" src="" alt="" class="absolute inset-0 w-44 h-44 m-auto object-cover rounded-full">
+                            <a id="view-cookie-link" href="#" target="_blank" rel="noopener noreferrer">
+                                <img id="view-cookie-img" src="" alt="" class="absolute inset-0 w-44 h-44 m-auto object-cover rounded-full">
+                            </a>
                         </div>
                         <div class="text-center space-y-4 flex-grow flex flex-col justify-center px-2">
                             <p id="view-cookie-name" class="font-semibold tracking-wider uppercase text-sm"></p>
@@ -257,6 +259,7 @@
         const viewMessageText = document.getElementById('view-message-text');
         const viewCookieImg = document.getElementById('view-cookie-img');
         const viewCookieName = document.getElementById('view-cookie-name');
+        const viewCookieLink = document.getElementById('view-cookie-link');
         const spotifyPlayerContainer = document.getElementById('spotify-player-container');
         const shareBtn = document.getElementById('share-btn');
         const backToHomeBtn = document.getElementById('back-to-home-btn');
@@ -410,6 +413,9 @@
             const cookie = cookieData.find(c => c.id === data.cookie_id) || cookieData[0];
             viewCookieImg.src = cookie.img;
             viewCookieImg.alt = cookie.name;
+            viewCookieName.textContent = cookie.name;
+            viewCookieLink.href = 'https://shopee.co.id/Soft-Baked-Cookies-Premium-Hampers-Gift-by-Okimo-Cookies-(order-min.-2-pcs)-Beli-4-Lebih-Hemat-i.1483970996.26778195387';
+            
             viewRecipientContainer.innerHTML = `
                 <span class="block text-sm uppercase tracking-wider">UNTUK:</span>
                 <span class="block text-3xl font-bold">${data.to}</span>
