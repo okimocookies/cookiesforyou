@@ -446,11 +446,11 @@ const populateViewMessage = (data) => {
             messageTextEl.classList.remove('text-4xl', 'text-3xl', 'text-2xl', 'text-x0.5');
 
             const len = data.message.length;
-            if (len > 180) {
+            if (len > 80) {
                 messageTextEl.classList.add('text-x0.5'); // Paling kecil
-            } else if (len > 80) {
-                messageTextEl.classList.add('text-2xl');
             } else if (len > 60) {
+                messageTextEl.classList.add('text-2xl');
+            } else if (len > 40) {
                 messageTextEl.classList.add('text-3xl');
             } else {
                 messageTextEl.classList.add('text-4xl'); // Paling besar
