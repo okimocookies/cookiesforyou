@@ -442,7 +442,17 @@
                  spotifyPlayerContainer.innerHTML = '';
             }
             
-            viewMessageText.textContent = data.message;
+            const messageTextEl = document.getElementById('view-message-text');
+            messageTextEl.textContent = data.message;
+            messageTextEl.classList.remove('text-4xl', 'text-3xl', 'text-2xl', 'text-xl');
+            if (data.message.length > 150) {
+                messageTextEl.classList.add('text-2xl');
+            } else if (data.message.length > 80) {
+                messageTextEl.classList.add('text-3xl');
+            } else {
+                messageTextEl.classList.add('text-4xl');
+            }
+
             showView('view');
         };
 
@@ -542,11 +552,9 @@
             const songInfo = message.songInfo;
             const cookieInfo = cookieData.find(c => c.id === message.cookie_id) || cookieData[0];
 
-            let fontSizeClass = 'text-3xl';
-            if (message.message.length > 80) {
-                fontSizeClass = 'text-xl';
-            } else if (message.message.length > 40) {
-                fontSizeClass = 'text-2xl';
+            let truncatedMessage = message.message;
+            if (truncatedMessage.length > 45) {
+                truncatedMessage = truncatedMessage.substring(0, 45) + '...';
             }
 
             messageCard.innerHTML = `
@@ -554,7 +562,7 @@
                     <div class="flex-grow flex items-center">
                         <div>
                             <p class="text-sm text-slate-200">Untuk: ${message.to}</p>
-                            <p class="font-handwriting ${fontSizeClass} text-white mt-2 message-content">${message.message}</p>
+                            <p class="font-handwriting text-3xl text-white mt-2 message-content">${truncatedMessage}</p>
                         </div>
                     </div>
                     <div class="text-xs text-slate-300 truncate pr-2 pt-2">
