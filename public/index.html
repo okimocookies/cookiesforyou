@@ -553,8 +553,8 @@
             const cookieInfo = cookieData.find(c => c.id === message.cookie_id) || cookieData[0];
 
             let truncatedMessage = message.message;
-            if (truncatedMessage.length > 45) {
-                truncatedMessage = truncatedMessage.substring(0, 45) + '...';
+            if (truncatedMessage.length > 20) {
+                truncatedMessage = truncatedMessage.substring(0, 20) + '...';
             }
 
             messageCard.innerHTML = `
