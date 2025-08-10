@@ -443,11 +443,11 @@ const populateViewMessage = (data) => {
             const messageTextEl = document.getElementById('view-message-text');
             messageTextEl.textContent = data.message;
 
-            messageTextEl.classList.remove('text-4xl', 'text-3xl', 'text-2xl', 'text-xl');
+            messageTextEl.classList.remove('text-4xl', 'text-3xl', 'text-2xl', 'text-x0.5');
 
             const len = data.message.length;
             if (len > 180) {
-                messageTextEl.classList.add('text-xl'); // Paling kecil
+                messageTextEl.classList.add('text-x0.5'); // Paling kecil
             } else if (len > 120) {
                 messageTextEl.classList.add('text-2xl');
             } else if (len > 60) {
