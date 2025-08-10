@@ -159,6 +159,9 @@
             <div id="view-message" class="hidden justify-center items-center py-12">
                  <div class="w-full max-w-sm mx-auto">
                     <div id="view-card" class="bg-[#2C6E49] rounded-2xl shadow-2xl p-6 text-white relative overflow-hidden flex flex-col aspect-[9/16]">
+                        <div class="flex-shrink-0 flex justify-center mb-4">
+                            <img src="/assets/logo.png" alt="Okimo Cookies Logo" class="h-8 w-auto">
+                        </div>
                         <div class="relative h-1/3 flex-shrink-0">
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-40 h-40 bg-[#4C956C] rounded-full"></div>
@@ -340,26 +343,21 @@
             songResultsEl.innerHTML = '';
         };
         
-// Revisi di dalam fungsi renderCookieOptions
-
         const renderCookieOptions = () => {
             cookieOptionsEl.innerHTML = '';
             cookieData.forEach(cookie => {
-                // Elemen diubah dari <a> kembali menjadi <div>
-                const cookieBox = document.createElement('div'); 
+                const cookieBox = document.createElement('div');
                 cookieBox.className = 'cookie-box border-2 border-gray-200 rounded-lg p-2 text-center cursor-pointer transition';
                 cookieBox.dataset.cookieId = cookie.id;
                 cookieBox.innerHTML = `
                     <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
                     <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
-                
-                // Event listener disederhanakan, hanya untuk memilih cookie
                 cookieBox.addEventListener('click', () => {
                     selectCookie(cookie.id);
                 });
                 cookieOptionsEl.appendChild(cookieBox);
             });
-};
+        };
 
         const selectCookie = (cookieId) => {
             selectedCookieId = cookieId;
