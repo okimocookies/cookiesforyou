@@ -161,7 +161,7 @@
                     <div id="view-card" class="bg-[#2C6E49] rounded-2xl shadow-2xl p-6 text-white relative overflow-hidden flex flex-col aspect-[9/16]">
                         <div class="relative h-1/3 flex-shrink-0">
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-48 h-48 bg-[#4C956C] rounded-full"></div>
+                                <div class="w-40 h-40 bg-[#4C956C] rounded-full"></div>
                             </div>
                             <a id="view-cookie-link" href="#" target="_blank" rel="noopener noreferrer">
                                 <img id="view-cookie-img" src="" alt="" class="absolute inset-0 w-44 h-44 m-auto object-cover rounded-full">
@@ -343,13 +343,20 @@
         const renderCookieOptions = () => {
             cookieOptionsEl.innerHTML = '';
             cookieData.forEach(cookie => {
-                const cookieBox = document.createElement('div');
+                const cookieBox = document.createElement('a');
+                cookieBox.href = "https://shopee.co.id/Soft-Baked-Cookies-Premium-Hampers-Gift-by-Okimo-Cookies-(order-min.-2-pcs)-Beli-4-Lebih-Hemat-i.1483970996.26778195387";
+                cookieBox.target = "_blank";
+                cookieBox.rel = "noopener noreferrer";
                 cookieBox.className = 'cookie-box border-2 border-gray-200 rounded-lg p-2 text-center cursor-pointer transition';
                 cookieBox.dataset.cookieId = cookie.id;
                 cookieBox.innerHTML = `
                     <img src="${cookie.img}" alt="${cookie.name}" class="w-full h-24 object-cover rounded-md mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/150x100/FCFDE2/2C6E49?text=Image+Not+Found';">
                     <p class="mt-2 text-sm font-semibold">${cookie.name}</p>`;
-                cookieBox.addEventListener('click', () => selectCookie(cookie.id));
+                cookieBox.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent navigation
+                    selectCookie(cookie.id);
+                    window.open(cookieBox.href, '_blank');
+                });
                 cookieOptionsEl.appendChild(cookieBox);
             });
         };
