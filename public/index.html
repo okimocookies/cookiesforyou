@@ -541,19 +541,19 @@
             const songInfo = message.songInfo;
             const cookieInfo = cookieData.find(c => c.id === message.cookie_id) || cookieData[0];
 
-            let fontSizeClass = 'text-3xl';
-            if (message.message.length > 80) {
-                fontSizeClass = 'text-xl';
-            } else if (message.message.length > 40) {
-                fontSizeClass = 'text-2xl';
+            if (message.message.length > 150) {
+            fontSizeClass = "text-lg";
+            } else {
+            fontSizeClass = "text-xl";
             }
+
 
             messageCard.innerHTML = `
                 <div class="h-full flex flex-col justify-between p-6 w-2/3">
                     <div class="flex-grow flex items-center">
                         <div>
                             <p class="text-sm text-slate-200">Untuk: ${message.to}</p>
-                            <p class="font-handwriting ${fontSizeClass} text-white mt-2 message-content">${message.message}</p>
+                            <p class="font-handwriting ${fontSizeClass} text-white mt-2 message-content">${message.message.length > 50 ? message.message.substring(0, 50) + "..." : message.message}</p>
                         </div>
                     </div>
                     <div class="text-xs text-slate-300 truncate pr-2 pt-2">
